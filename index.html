@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VR Policy Clarifier</title>
+  <meta name="description" content="Tier 1 prompt template for Vocational Rehabilitation policy interpretation.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="hero">
+    <div class="shell hero-content">
+      <p class="eyebrow">BUAD 583 | AI Literacy &amp; Strategy for Managers</p>
+      <h1>VR Policy Clarifier</h1>
+      <p class="subtitle">Tier 1 Prompt Template for Vocational Rehabilitation Policy Interpretation</p>
+      <p class="description">
+        The VR Policy Clarifier is a reusable prompt-template artifact that helps Vocational Rehabilitation counselors interpret gray-area policy questions using only the policy, memo, FAQ, procedure, or manual text they provide. It is designed for decision support only. It does not replace a supervisor, Policy Program Coordinator, official manual, leadership approval, or legal guidance.
+      </p>
+      <div class="badge-row" aria-label="Build status badges">
+        <span class="badge">Tier 1 Prompt Template</span>
+        <span class="badge">Decision Support Only</span>
+        <span class="badge">Human-in-the-Loop</span>
+        <span class="badge">No Data Stored</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="shell">
+    <section class="alert-card" aria-labelledby="privacy-warning-title">
+      <div class="alert-icon" aria-hidden="true">!</div>
+      <div>
+        <h2 id="privacy-warning-title">Use de-identified information only</h2>
+        <p>
+          Do not enter customer names, Social Security numbers, addresses, phone numbers, medical details, employer names tied to a specific customer, or any other identifying information.
+        </p>
+        <p>
+          This tool uses only the policy text provided by the counselor. It does not retrieve policy, access case records, make final decisions, authorize services, determine eligibility, close cases, communicate with customers, or replace supervisor/leadership review.
+        </p>
+      </div>
+    </section>
+
+    <section class="quick-grid" aria-label="Instructor quick start and Build v1 scope">
+      <section class="card quick-card" aria-labelledby="quick-start-title">
+        <div class="section-heading">
+          <span class="section-kicker">Instructor Quick Start</span>
+          <h2 id="quick-start-title">Four-step review path</h2>
+        </div>
+        <ol class="numbered-quick">
+          <li>Click &ldquo;Load Sample Scenario.&rdquo;</li>
+          <li>Click &ldquo;Generate Prompt.&rdquo;</li>
+          <li>Copy the generated prompt into an AI tool.</li>
+          <li>Review the output against the guardrails and expected response pattern.</li>
+        </ol>
+      </section>
+
+      <section class="card quick-card scope-card" aria-labelledby="scope-title">
+        <div class="section-heading">
+          <span class="section-kicker">Build v1 Scope</span>
+          <h2 id="scope-title">Tier 1 prompt-template artifact</h2>
+        </div>
+        <ul class="scope-list">
+          <li>This is a Tier 1 prompt-template artifact.</li>
+          <li>It does not call an AI API.</li>
+          <li>It does not retrieve policy.</li>
+          <li>It does not store or transmit data.</li>
+          <li>It does not make final VR decisions.</li>
+          <li>It supports counselor reasoning and human review.</li>
+        </ul>
+      </section>
+    </section>
+
+    <section class="app-layout" aria-label="Prompt builder workspace">
+      <div class="left-column">
+        <section class="card" aria-labelledby="problem-title">
+          <div class="section-heading">
+            <span class="section-kicker">Business Problem</span>
+            <h2 id="problem-title">Policy interpretation needs a repeatable, source-grounded workflow.</h2>
+          </div>
+          <p>
+            VR counselors often need to interpret gray-area documentation and service questions quickly while staying aligned with policy, confidentiality rules, and supervisory review expectations. This artifact provides a standardized prompt wrapper so the counselor can give an approved AI tool only the relevant de-identified facts and policy text.
+          </p>
+        </section>
+
+        <section class="card" aria-labelledby="builder-title">
+          <div class="section-heading">
+            <span class="section-kicker">Prompt Builder</span>
+            <h2 id="builder-title">Enter the de-identified question and source policy text.</h2>
+          </div>
+
+          <form id="promptForm" novalidate>
+            <label for="counselorQuestion">Counselor question</label>
+            <textarea id="counselorQuestion" name="counselorQuestion" rows="5" placeholder="Example: If Counseling &amp; Guidance and Person-Centered Practices are both discussed during one customer meeting, should staff document one Actual Service or two? Is a Case Note still needed?"></textarea>
+
+            <label for="caseContext">De-identified case context</label>
+            <textarea id="caseContext" name="caseContext" rows="5" placeholder="Example: A counselor met with a customer and discussed adjustment to disability, informed choice, employment goals, and next steps. No identifying details are included."></textarea>
+
+            <label for="policyText">Policy/manual/memo/FAQ/procedure text</label>
+            <textarea id="policyText" name="policyText" rows="7" placeholder="Paste only the relevant policy, memo, FAQ, manual, or procedure language here. Do not paste customer-identifying information."></textarea>
+
+            <label for="decisionAction">Decision or documentation action being considered</label>
+            <textarea id="decisionAction" name="decisionAction" rows="4" placeholder="Example: The counselor is considering whether to document one Actual Service, two Actual Services, and/or a Customer Contact Case Note."></textarea>
+
+            <div id="validationMessages" class="message-area" role="alert" aria-live="polite"></div>
+
+            <div class="button-row">
+              <button type="button" id="loadSample" class="button secondary">Load Sample Scenario</button>
+              <button type="submit" id="generatePrompt" class="button primary">Generate Prompt</button>
+              <button type="button" id="resetForm" class="button ghost">Reset</button>
+              <button type="button" id="printPage" class="button ghost">Print / Save as PDF</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <aside class="right-column" aria-label="Guardrails and generated prompt">
+        <section class="card compact" aria-labelledby="guardrails-title">
+          <div class="section-heading">
+            <span class="section-kicker">Guardrails</span>
+            <h2 id="guardrails-title">What this artifact will and will not do</h2>
+          </div>
+          <ul class="check-list">
+            <li>Uses only the policy text pasted into the builder.</li>
+            <li>Frames the AI response as decision support, not final authority.</li>
+            <li>Requires human review before case action or documentation.</li>
+            <li>Does not store, transmit, retrieve, or analyze data outside this page.</li>
+            <li>Flags review when a question is unsupported, high-risk, or exception-based.</li>
+          </ul>
+          <p class="privacy-note">No data is stored or transmitted. Everything happens in your browser.</p>
+        </section>
+
+        <section class="card compact" aria-labelledby="generated-title">
+          <div class="section-heading split-heading">
+            <div>
+              <span class="section-kicker">Generated Prompt</span>
+              <h2 id="generated-title">Copy this into the approved AI tool.</h2>
+            </div>
+          </div>
+          <pre id="generatedPrompt" class="prompt-output empty" tabindex="0" aria-label="Generated prompt output">Generated prompt will appear here after you complete all fields and select Generate Prompt.</pre>
+          <div class="button-row prompt-actions">
+            <button type="button" id="copyPrompt" class="button secondary" disabled>Copy Generated Prompt</button>
+            <button type="button" id="downloadPrompt" class="button secondary" disabled>Download Prompt as .txt</button>
+          </div>
+          <div id="statusMessage" class="status-message" role="status" aria-live="polite"></div>
+        </section>
+
+        <section class="card compact" aria-labelledby="format-title">
+          <div class="section-heading">
+            <span class="section-kicker">Expected Output</span>
+            <h2 id="format-title">Required AI response format</h2>
+          </div>
+          <ol class="tight-list">
+            <li>Direct Answer</li>
+            <li>Policy Basis</li>
+            <li>Reasoning</li>
+            <li>Gray Area / Ambiguity</li>
+            <li>Counselor Action Steps</li>
+            <li>Documentation Needed</li>
+            <li>Supervisor / Leadership Review Flag</li>
+            <li>Confidence Level</li>
+            <li>Clarifying Questions</li>
+          </ol>
+        </section>
+      </aside>
+    </section>
+
+    <section class="card full-width" aria-labelledby="sample-pattern-title">
+      <div class="section-heading">
+        <span class="section-kicker">Sample Review</span>
+        <h2 id="sample-pattern-title">Expected Response Pattern for Sample Scenario</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Output Section</th>
+              <th>Expected Content</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Direct Answer</td>
+              <td>Likely two Actual Services are needed if both Counseling &amp; Guidance and Person-Centered Practices were actually provided, and a Customer Contact Case Note is also needed.</td>
+            </tr>
+            <tr>
+              <td>Policy Basis</td>
+              <td>The provided policy summary treats C&amp;G and PCP as distinct services and requires a Case Note when an Actual Service is entered for either.</td>
+            </tr>
+            <tr>
+              <td>Gray Area</td>
+              <td>If the meeting was only scheduling, administrative follow-up, or general case management, it may not meet the definition of either service.</td>
+            </tr>
+            <tr>
+              <td>Documentation Steps</td>
+              <td>Document the appropriate Actual Service or Services, then document Customer Contact in a Case Note tied to the service date.</td>
+            </tr>
+            <tr>
+              <td>Review Flag</td>
+              <td>No for the basic fact pattern; Maybe if the counselor is unsure whether the interaction qualifies as C&amp;G, PCP, or case management.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card full-width" aria-labelledby="how-to-title">
+      <div class="section-heading">
+        <span class="section-kicker">Workflow</span>
+        <h2 id="how-to-title">How to Use This Build</h2>
+      </div>
+      <ol class="process-list">
+        <li>Remove identifying information.</li>
+        <li>Paste the counselor question.</li>
+        <li>Add de-identified case context.</li>
+        <li>Paste the relevant policy text.</li>
+        <li>Enter the action being considered.</li>
+        <li>Generate the prompt.</li>
+        <li>Copy the prompt into the AI tool approved for the course or workplace.</li>
+        <li>Review the AI response against the actual policy.</li>
+        <li>Escalate when the response flags review or when uncertainty remains.</li>
+      </ol>
+    </section>
+
+    <section class="card full-width" aria-labelledby="human-workflow-title">
+      <div class="section-heading">
+        <span class="section-kicker">Human-in-the-Loop</span>
+        <h2 id="human-workflow-title">Human-in-the-Loop Workflow</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Primary Actor</th>
+              <th>What Happens</th>
+              <th>Control / Guardrail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Policy question identified</td>
+              <td>Counselor</td>
+              <td>Counselor identifies a gray-area policy issue</td>
+              <td>Human initiates the workflow</td>
+            </tr>
+            <tr>
+              <td>De-identification</td>
+              <td>Counselor</td>
+              <td>Counselor removes customer-identifying information</td>
+              <td>Confidentiality protection</td>
+            </tr>
+            <tr>
+              <td>Policy text selected</td>
+              <td>Counselor</td>
+              <td>Counselor pastes only relevant policy/memo/FAQ/procedure text</td>
+              <td>Source-grounding</td>
+            </tr>
+            <tr>
+              <td>Prompt generated</td>
+              <td>Web artifact</td>
+              <td>Tool formats the reusable prompt</td>
+              <td>No data stored or transmitted</td>
+            </tr>
+            <tr>
+              <td>AI response reviewed</td>
+              <td>Counselor</td>
+              <td>Counselor checks direct answer, policy basis, ambiguity, documentation, and confidence</td>
+              <td>Human review required</td>
+            </tr>
+            <tr>
+              <td>Escalation decision</td>
+              <td>Counselor / Supervisor</td>
+              <td>High-risk or unsupported issues are escalated</td>
+              <td>Supervisor/leadership review flag</td>
+            </tr>
+            <tr>
+              <td>Case action/documentation</td>
+              <td>Counselor</td>
+              <td>Counselor documents or acts only after review</td>
+              <td>AI does not enter case notes or make decisions</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card full-width" aria-labelledby="evaluation-title">
+      <div class="section-heading">
+        <span class="section-kicker">Testing</span>
+        <h2 id="evaluation-title">Evaluation Plan</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Test Case</th>
+              <th>Scenario</th>
+              <th>What It Tests</th>
+              <th>Expected Behavior</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Test 1</td>
+              <td>C&amp;G and PCP documentation question</td>
+              <td>Basic policy interpretation and documentation guidance</td>
+              <td>Likely answer, policy basis, gray area, documentation steps, review flag</td>
+              <td><span class="status-pill pass">Completed - Pass</span></td>
+            </tr>
+            <tr>
+              <td>Test 2</td>
+              <td>Question submitted with no policy text</td>
+              <td>Hallucination guardrail</td>
+              <td>Says &ldquo;Not enough policy basis provided&rdquo;</td>
+              <td><span class="status-pill planned">Planned</span></td>
+            </tr>
+            <tr>
+              <td>Test 3</td>
+              <td>High-cost or exception-based service question</td>
+              <td>Escalation logic</td>
+              <td>Flags supervisor/leadership review as Yes or Maybe</td>
+              <td><span class="status-pill planned">Planned</span></td>
+            </tr>
+            <tr>
+              <td>Test 4</td>
+              <td>Vague facts with incomplete policy</td>
+              <td>Uncertainty handling</td>
+              <td>Identifies ambiguity and asks clarifying questions</td>
+              <td><span class="status-pill planned">Planned</span></td>
+            </tr>
+            <tr>
+              <td>Test 5</td>
+              <td>Accidental identifying information</td>
+              <td>Confidentiality protection</td>
+              <td>Warns user and avoids repeating identifying details</td>
+              <td><span class="status-pill planned">Planned</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card full-width" aria-labelledby="metrics-title">
+      <div class="section-heading">
+        <span class="section-kicker">Measures</span>
+        <h2 id="metrics-title">Preliminary Success Metrics</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Target</th>
+              <th>Why It Matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Source-grounding rate</td>
+              <td>100% of responses rely only on provided policy text</td>
+              <td>Prevents invented policy</td>
+            </tr>
+            <tr>
+              <td>Unsupported-answer handling</td>
+              <td>100% of insufficient-text scenarios say &ldquo;Not enough policy basis provided&rdquo;</td>
+              <td>Reduces hallucination risk</td>
+            </tr>
+            <tr>
+              <td>Appropriate escalation</td>
+              <td>High-risk scenarios flagged Yes or Maybe for review</td>
+              <td>Protects customer rights and compliance</td>
+            </tr>
+            <tr>
+              <td>Confidentiality protection</td>
+              <td>No repeated customer-identifying information</td>
+              <td>Protects sensitive VR information</td>
+            </tr>
+            <tr>
+              <td>Usefulness for counselor workflow</td>
+              <td>Response is clear, structured, and actionable</td>
+              <td>Supports faster policy interpretation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card full-width" aria-labelledby="risk-title">
+      <div class="section-heading">
+        <span class="section-kicker">Controls</span>
+        <h2 id="risk-title">Risk Register</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Risk</th>
+              <th>Likelihood</th>
+              <th>Impact</th>
+              <th>Guardrail / Mitigation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Invented policy</td>
+              <td>Medium</td>
+              <td>High</td>
+              <td>Tool instructs AI to use only provided policy text and say &ldquo;Not enough policy basis provided&rdquo; when unsupported</td>
+            </tr>
+            <tr>
+              <td>Overreliance</td>
+              <td>Medium</td>
+              <td>High</td>
+              <td>Tool states it is decision support only and requires human review</td>
+            </tr>
+            <tr>
+              <td>Confidentiality exposure</td>
+              <td>Medium</td>
+              <td>High</td>
+              <td>Tool requires de-identification and warns against customer-identifying information</td>
+            </tr>
+            <tr>
+              <td>Incomplete policy text</td>
+              <td>High</td>
+              <td>Medium</td>
+              <td>Tool asks clarifying questions and lowers confidence</td>
+            </tr>
+            <tr>
+              <td>Misinterpretation of vague policy</td>
+              <td>Medium</td>
+              <td>Medium</td>
+              <td>Tool identifies gray areas and flags supervisor review</td>
+            </tr>
+            <tr>
+              <td>Inconsistent use by counselors</td>
+              <td>Medium</td>
+              <td>Medium</td>
+              <td>Standardized prompt format creates repeatable workflow</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card full-width" aria-labelledby="questions-title">
+      <div class="section-heading">
+        <span class="section-kicker">Reviewer Feedback</span>
+        <h2 id="questions-title">Open Questions for Reviewers</h2>
+      </div>
+      <ul class="question-list">
+        <li>Does the business problem feel clear and capstone-worthy?</li>
+        <li>Does the workflow make sense for a real VR counselor environment?</li>
+        <li>Are the guardrails strong enough for policy interpretation?</li>
+        <li>Is the evaluation plan specific enough for the Early Checkpoint?</li>
+        <li>Should the final version stay Tier 1, or would a Tier 2 configured assistant be more useful later?</li>
+        <li>What additional test scenarios would make the evaluation more credible?</li>
+      </ul>
+    </section>
+
+    <section class="card full-width" aria-labelledby="demo-title">
+      <div class="section-heading">
+        <span class="section-kicker">Demo</span>
+        <h2 id="demo-title">Demo Instructions</h2>
+      </div>
+      <p>
+        For the demo video, show the tool, load the sample scenario, generate the prompt, copy it into an AI tool, review the structured response, and explain the human-in-the-loop guardrails.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <p>VR Policy Clarifier - Jennings | Tier 1 Prompt Template | No data is stored or transmitted.</p>
+    </div>
+  </footer>
+</body>
+</html>
